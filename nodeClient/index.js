@@ -9,6 +9,12 @@
 //--Memory Usage:: Free, Total, OS Type, Uptime,
 //--CPU Info: Type, No. of Cores, Clock Speed
 const os = require("os");
+const { io } = require("socket.io-client");
+let socket = io("http://127.0.0.1:8181");
+
+socket.on("connect", () => {
+  console.log("I connected to the socket server array");
+});
 
 function performanceData() {
   return new Promise(async (resolve, reject) => {
@@ -47,7 +53,7 @@ function performanceData() {
   });
 }
 
-//cpus is all cores, we needthe load averge of all the cores
+//cpus is all cores, we need the load averge of all the cores
 function cpuAverage() {
   const cpus = os.cpus();
   //Get ms in each mode, but this number is since reboot
