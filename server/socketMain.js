@@ -23,18 +23,39 @@ function socketMain(io, socket) {
 
   //A machine has connected, check to see if its new
   //If it's, add it!
-  socket.on("initPerfData", (data) => {
+  socket.on("initPerfData", async (data) => {
     //update our function scoped variable
     macA = data.macA;
 
     //now go check mongo
-    checkAndAdd(macA);
+    const mongooseResponse = await checkAndAdd(macA);
+    console.log(mongooseResponse);
     // console.log("initPerfData", data);
   });
 
   // console.log("A socket connected! Wooow", socket.id);
   socket.on("perfData", (data) => {
     console.log(data);
+  });
+}
+
+function checkAndAdd(data) {
+  //Needs to be a promise as its accessding database
+  return new Promise((resolve, reject) => {
+    Machine.findOne({
+      macA: data.macA,
+    })
+      .then((response) => {
+        if (response === null) {
+          let newMachine = new Machine(data);
+          newMachine.save();
+        } else {
+          res.send(response);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 }
 
