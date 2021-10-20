@@ -1,4 +1,13 @@
+const mongoose = require("mongoose");
+mongoose.connect(
+  "mongodb+srv://perfData:perfData@cluster0.gf60g.mongodb.net/perfData?retryWrites=true&w=majority",
+  { useNewUrlParser: true }
+);
+
+const Machine = require("./models/Machine");
+
 function socketMain(io, socket) {
+  let macA;
   socket.on("clientAuth", (key) => {
     if (key === "qqqqqqqqqqqqq") {
       //valid nodeClient has joined
@@ -6,12 +15,23 @@ function socketMain(io, socket) {
     } else if (key === "wwwwwwwwww") {
       //valid ui client has joined
       socket.join("ui");
-    }else{
+    } else {
       //an invalid client has joined, Goodbye
-      socket.disconnect(true)
+      socket.disconnect(true);
     }
-    
   });
+
+  //A machine has connected, check to see if its new
+  //If it's, add it!
+  socket.on("initPerfData", (data) => {
+    //update our function scoped variable
+    macA = data.macA;
+
+    //now go check mongo
+    checkAndAdd(macA);
+    // console.log("initPerfData", data);
+  });
+
   // console.log("A socket connected! Wooow", socket.id);
   socket.on("perfData", (data) => {
     console.log(data);

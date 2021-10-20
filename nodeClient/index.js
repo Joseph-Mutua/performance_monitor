@@ -16,7 +16,7 @@ socket.on("connect", () => {
   // console.log("I connected to the socket server array");
   //We need a way to identify this machine to anyone interested
   const netInterface = os.networkInterfaces();
-  console.log(netInterface)
+  console.log(netInterface);
   let macA;
 
   //Loop through all thenetwork interfaces forthis machine and find a non-internal one
@@ -28,14 +28,24 @@ socket.on("connect", () => {
   }
 
   //Client auth with single key value
-  socket.emit("clientAuth", "qqqqqqqqqqqqq")
+  socket.emit("clientAuth", "qqqqqqqqqqqqq");
 
+  performanceData().then((allPerformanceData) => {
+    allPerformanceData.macA = macA;
+    socket.emit("initPerfData", allPerformanceData);
+  });
+
+  //Start sending over data on internet
   let perfDataInterval = setInterval(() => {
-    performanceData().then((allPerformaceData) => {
-      // console.log(allPerformaceData);
-      socket.emit("perfData", allPerformaceData)
+    performanceData().then((allPerformanceData) => {
+      // console.log(allPerformanceData);
+      socket.emit("perfData", allPerformanceData);
     });
   }, 1000);
+
+  socket.on("disconnect", () => {
+    clearInterval(perfDataInterval);
+  });
 });
 
 function performanceData() {
@@ -116,6 +126,6 @@ function getCpuLoad() {
   });
 }
 
-performanceData().then((allPerformaceData) => {
-  console.log(allPerformaceData);
+performanceData().then((allPerformanceData) => {
+  console.log(allPerformanceData);
 });
