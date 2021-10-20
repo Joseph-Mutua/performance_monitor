@@ -13,7 +13,29 @@ const { io } = require("socket.io-client");
 let socket = io("http://127.0.0.1:8181");
 
 socket.on("connect", () => {
-  console.log("I connected to the socket server array");
+  // console.log("I connected to the socket server array");
+  //We need a way to identify this machine to anyone interested
+  const netInterface = os.networkInterfaces();
+  console.log(netInterface)
+  let macA;
+
+  //Loop through all thenetwork interfaces forthis machine and find a non-internal one
+  for (let key in netInterface) {
+    if (!netInterface[key].internal) {
+      macA = netInterface[key].mac;
+      break;
+    }
+  }
+
+  //Client auth with single key value
+  socket.emit("clientAuth", "qqqqqqqqqqqqq")
+
+  let perfDataInterval = setInterval(() => {
+    performanceData().then((allPerformaceData) => {
+      // console.log(allPerformaceData);
+      socket.emit("perfData", allPerformaceData)
+    });
+  }, 1000);
 });
 
 function performanceData() {
