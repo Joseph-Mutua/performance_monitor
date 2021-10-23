@@ -15,6 +15,7 @@ function socketMain(io, socket) {
     } else if (key === "wwwwwwwwww") {
       //valid ui client has joined
       socket.join("ui");
+      console.log("A ui socket has joined");
     } else {
       //an invalid client has joined, Goodbye
       socket.disconnect(true);
@@ -35,7 +36,8 @@ function socketMain(io, socket) {
 
   // console.log("A socket connected! Wooow", socket.id);
   socket.on("perfData", (data) => {
-    console.log(data);
+    console.log("Tick.......");
+    io.to("ui").emit("data", data);
   });
 }
 

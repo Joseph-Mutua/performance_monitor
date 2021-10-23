@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Component } from "react";
+import socket from "./utilities/socketConnection";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      performanceData: {},
+    };
+  }
+
+  componentDidMount() {
+    socket.on("data", (data) => {
+      console.log("DATA FROM NODE CLIENT", data);
+    });
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <h1>Sanity Check</h1>
+        </header>
+      </div>
+    );
+  }
 }
 
 export default App;
