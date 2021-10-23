@@ -31,9 +31,18 @@ class Widget extends Component {
     return (
       <div>
         <h1>Widget!!</h1>
-        <Cpu cpuData={cpu} />
-        <Mem memData={mem} />
-        <Info infoData={info} />
+        <div>
+          {" "}
+          <Cpu cpuData={cpu} />
+        </div>
+
+        <div>
+          {" "}
+          <Mem memData={mem} />
+        </div>
+        <div>
+          <Info infoData={info} />
+        </div>
       </div>
     );
   }
