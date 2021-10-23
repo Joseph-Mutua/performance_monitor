@@ -21,8 +21,12 @@ socket.on("connect", () => {
 
   //Loop through all thenetwork interfaces forthis machine and find a non-internal one
   for (let key in netInterface) {
-    if (!netInterface[key].internal) {
-      macA = netInterface[key].mac;
+    if (!netInterface[key][0].internal) {
+      if (!netInterface[key][0].mac === "00:00:00:00:00:00") {
+        macA = Math.random().toString(36).substr(2, 15);
+      } else {
+        macA = netInterface[key][0].mac;
+      }
       break;
     }
   }
@@ -39,6 +43,8 @@ socket.on("connect", () => {
   let perfDataInterval = setInterval(() => {
     performanceData().then((allPerformanceData) => {
       // console.log(allPerformanceData);
+
+      allPerformanceData.macA = macA;
       socket.emit("perfData", allPerformanceData);
     });
   }, 1000);
@@ -81,6 +87,7 @@ function performanceData() {
       cpuSpeed,
       numCores,
       memUsage,
+      cpuLoad,
     });
   });
 }
