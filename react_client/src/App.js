@@ -1,6 +1,7 @@
 import "./App.css";
 import { Component } from "react";
 import socket from "./utilities/socketConnection";
+import Widget from "./Widget";
 
 class App extends Component {
   constructor() {
@@ -19,9 +20,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <h1>Sanity Check</h1>
-        </header>
+        <Widget />
       </div>
     );
   }
