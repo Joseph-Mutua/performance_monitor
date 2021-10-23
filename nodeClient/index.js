@@ -21,6 +21,11 @@ socket.on("connect", () => {
 
   //Loop through all thenetwork interfaces forthis machine and find a non-internal one
   for (let key in netInterface) {
+    //FOR TESTING PURPOSES
+    macA = Math.floor(Math.random() * 3) + 1;
+    break;
+    //FOR TESTING PURPOSES
+
     if (!netInterface[key][0].internal) {
       if (!netInterface[key][0].mac === "00:00:00:00:00:00") {
         macA = Math.random().toString(36).substr(2, 15);
@@ -75,7 +80,8 @@ function performanceData() {
 
     const usedMem = totalMem - freeMem;
     const memUsage = Math.floor((usedMem / totalMem) * 100) / 100;
-    console.log(memUsage);
+    const isActive = true;
+    // console.log(memUsage);
 
     const cpuLoad = await getCpuLoad();
     resolve({
@@ -88,6 +94,7 @@ function performanceData() {
       numCores,
       memUsage,
       cpuLoad,
+      isActive,
     });
   });
 }

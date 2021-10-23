@@ -16,10 +16,27 @@ function socketMain(io, socket) {
       //valid ui client has joined
       socket.join("ui");
       console.log("A ui socket has joined");
+      Machine.find({}, (err, docs) => {
+        docs.forEach((aMachine) => {
+          aMachine.isActive = false;
+          io.to("ui").emit("data", aMachine);
+        });
+      });
     } else {
       //an invalid client has joined, Goodbye
       socket.disconnect(true);
     }
+  });
+
+  socket.on("disconnect", () => {
+    Machine.find({ macA: macA }, (err, docs) => {
+      if (docs.length > 0) {
+        //Send one last emit to React
+        docs[0].isActive = false;
+
+        io.to("ui").emit("data", docs[0]);
+      }
+    });
   });
 
   //A machine has connected, check to see if its new

@@ -11,6 +11,8 @@ class App extends Component {
     };
   }
 
+ 
+
   componentDidMount() {
     socket.on("data", (data) => {
       //Inside this callback, we just got new data
