@@ -31,7 +31,7 @@ class Widget extends Component {
     const cpu = { cpuLoad, cpuWidgetId };
     const mem = { totalMem, freeMem, memUsage, memWidgetId };
     const info = { macA, osType, upTime, cpuModel, numCores, cpuSpeed };
-    const notActiveDiv = "";
+    let notActiveDiv = "";
     let isActive;
 
     if (!isActive) {
